@@ -279,7 +279,7 @@ export default function HomePage() {
                 Beyond the Classroom
               </p>
               <h2 className="text-3xl md:text-4xl font-bold text-[#493a35] mt-4">
-                Experiences That Make School Life Memorable.
+                Experiences That Make School Life Memorable .
               </h2>
               <p className="mt-6 text-[#75665c] leading-8">
                 Cultural celebrations, sports, competitions and creative
