@@ -1,6 +1,39 @@
+"use client";
+
 import Link from "next/link";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import EnquiryForm from "../components/home/EnquiryForm";
+
+const slides = [
+  {
+    image: "/images/slider/school-1.jpg",
+    label: "Learning · Growing · Achieving",
+    title: "A brighter tomorrow begins here.",
+  },
+  {
+    image: "/images/slider/school-2.jpg",
+    label: "Discover · Explore · Create",
+    title: "Every child has the potential to shine.",
+  },
+  {
+    image: "/images/slider/school-3.jpg",
+    label: "Building Strong Foundations",
+    title: "Learning that inspires confidence.",
+  },
+  {
+    image: "/images/slider/school-4.jpg",
+    label: "Beyond the Classroom",
+    title: "Experiences that shape young minds.",
+  },
+  {
+    image: "/images/slider/school-5.jpg",
+    label: "Our School · Our Family",
+    title: "Growing together, achieving together.",
+  },
+];
 
 const learningStages = [
   {
@@ -56,7 +89,29 @@ const facilities = [
   },
 ];
 
+
+
 export default function HomePage() {
+
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % slides.length);
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const previous = () => {
+    setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const next = () => {
+    setCurrent((prev) => (prev + 1) % slides.length);
+  }
+
+
   return (
     <>
       <Header />
@@ -103,22 +158,76 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div
-              className="relative min-h-[340px] md:min-h-[440px] rounded-[32px] overflow-hidden shadow-xl bg-cover bg-center"
-              style={{
-                backgroundImage:
-                  "linear-gradient(180deg, transparent 50%, rgba(45,30,25,.45)), url('/images/school-hero.jpg')",
-              }}
-            >
-              <div className="absolute bottom-6 left-6 right-6 text-white">
-                <p className="text-xs uppercase tracking-[3px] font-semibold">
-                  Learning · Growing · Achieving
-                </p>
-                <h2 className="text-2xl font-bold mt-2">
-                  A brighter tomorrow begins here.
-                </h2>
-              </div>
-            </div>
+            <div className="relative min-h-[340px] md:min-h-[440px] rounded-[32px] overflow-hidden shadow-xl group">
+
+      {slides.map((slide, index) => (
+        <div
+          key={slide.image}
+          className={`absolute inset-0 transition-opacity duration-1000 ${
+            current === index ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <Image
+            src={slide.image}
+            alt={slide.title}
+            fill
+            priority={index === 0}
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover"
+          />
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
+
+          <div className="absolute bottom-10 left-6 right-6 md:left-10 text-white">
+            <p className="text-xs uppercase tracking-[3px] font-semibold">
+              {slide.label}
+            </p>
+
+            <h2 className="text-2xl md:text-3xl font-bold mt-3 max-w-lg">
+              {slide.title}
+            </h2>
+          </div>
+        </div>
+      ))}
+
+      {/* Previous button */}
+      <button
+        onClick={previous}
+        aria-label="Previous slide"
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-10
+        w-10 h-10 rounded-full bg-white/80 hover:bg-white
+        text-[#493a35] text-xl transition"
+      >
+        ‹
+      </button>
+
+      {/* Next button */}
+      <button
+        onClick={next}
+        aria-label="Next slide"
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-10
+        w-10 h-10 rounded-full bg-white/80 hover:bg-white
+        text-[#493a35] text-xl transition"
+      >
+        ›
+      </button>
+
+      {/* Slide indicators */}
+      <div className="absolute bottom-4 right-6 z-10 flex gap-2">
+        {slides.map((slide, index) => (
+          <button
+            key={slide.image}
+            onClick={() => setCurrent(index)}
+            aria-label={`Go to slide ${index + 1}`}
+            className={`h-2 rounded-full transition-all ${
+              current === index
+                ? "w-7 bg-white"
+                : "w-2 bg-white/60"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
           </div>
         </section>
 
@@ -143,17 +252,27 @@ export default function HomePage() {
 
         {/* INTRODUCTION */}
         <section className="max-w-7xl mx-auto px-5 py-20 grid md:grid-cols-2 gap-12 items-center">
-          <div className="bg-[#e8ddc9] rounded-3xl min-h-[320px] flex items-center justify-center p-8">
-            <div className="text-center">
-              <span className="text-6xl">✦</span>
-              <p className="mt-4 font-bold text-[#493a35]">
-                A community of learners
-              </p>
-              <p className="text-sm text-[#75665c] mt-2">
-                Replace this panel with an actual school photograph.
-              </p>
-            </div>
-          </div>
+          <div className="relative min-h-[320px] rounded-3xl overflow-hidden shadow-lg">
+  <Image
+    src="/images/school-img.jpg"
+    alt="Students and learning environment at Little Star Public School"
+    fill
+    sizes="(max-width: 768px) 100vw, 50vw"
+    className="object-cover"
+  />
+
+  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+
+  <div className="absolute bottom-6 left-6 right-6 text-white">
+    <p className="text-xs uppercase tracking-[3px] font-semibold">
+      Our School · Our Community
+    </p>
+
+    <h3 className="mt-2 text-2xl font-bold">
+      A community of learners
+    </h3>
+  </div>
+</div>
 
           <div>
             <p className="text-[#c24d4a] text-xs font-bold tracking-[3px] uppercase">
@@ -231,6 +350,8 @@ export default function HomePage() {
           </div>
         </section>
 
+        <EnquiryForm />
+
         {/* FACILITIES */}
         <section className="max-w-7xl mx-auto px-5 py-20">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-12">
@@ -294,17 +415,15 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <div className="min-h-[300px] rounded-3xl bg-[#d9c8a9] flex items-center justify-center text-center p-8">
-              <div>
-                <span className="text-6xl">✦</span>
-                <p className="font-bold text-[#493a35] mt-4">
-                  School Events & Activities
-                </p>
-                <p className="text-sm text-[#75665c] mt-2">
-                  Add photographs from actual school events here.
-                </p>
-              </div>
-            </div>
+            <div className="relative min-h-[300px] overflow-hidden rounded-3xl">
+  <Image
+    src="/images/school-events.jpg"
+    alt="Students participating in school events and activities"
+    fill
+    className="object-cover"
+    sizes="(max-width: 768px) 100vw, 50vw"
+  />
+</div>
           </div>
         </section>
 

@@ -1,4 +1,5 @@
 import "./globals.css";
+import EnquiryPopup from "../components/home/EnquiryPopup";
 
 export const metadata = {
   title: "Little Star Public School | Nursery to Class X",
@@ -9,7 +10,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <EnquiryPopup />
+      </body>
     </html>
   );
 }
